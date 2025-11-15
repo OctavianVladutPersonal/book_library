@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Book Library</title>
+    <style>
+        /* All the old CSS is here... */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background-color: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h1, h2 { color: #2c3e50; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+        /* Adjusted form layout for login/signup */
+        form { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 25px; } 
+        .form-group { display: grid; gap: 5px; } 
+        input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s ease; }
+        button:hover { background-color: #2980b9; }
+        button.logout { background-color: #e74c3c; padding: 10px 15px; }
+        button.logout:hover { background-color: #c0392b; }
+        
+        /* Style for Edit button */
+        button.edit { background-color: #f39c12; padding: 10px 15px; margin-right: 5px; }
+        button.edit:hover { background-color: #e67e22; }
+
+        #searchInput { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #ecf0f1; cursor: pointer; user-select: none; }
+        th:hover { background-color: #dcdcdc; }
+        th.sorted-asc::after { content: ' \u25B2'; }
+        th.sorted-desc::after { content: ' \u25BC'; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+        /* --- AUTH STYLES --- */
+        #auth-container { background-color: #fafafa; border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        #auth-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; } /* Restored 2 column grid for buttons */
+        #auth-form button { grid-column: auto; } /* Buttons now take one column each */
+        #auth-status { display: flex; justify-content: space-between; align-items: center; background-color: #ecf0f1; padding: 10px 20px; border-radius: 8px; margin-bottom: 25px; }
+        #auth-status span { font-weight: 500; }
+        
+        /* Utility class to hide elements */
+        .hidden { display: none; }
+
+        /* Table Action Cell Style */
+        .action-cell { white-space: nowrap; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📚 My Book Library (Secure)</h1>
+
+        <div id="auth-status" class="hidden">
+            <span id="user-email"></span>
+            <button id="logout-button" class="logout">Log Out</button>
+        </div>
+
+        <div id="auth-container">
+            <h2>Admin Login / Sign Up</h2>
+            <form id="auth-form">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                
+                <button type="button" id="login-button">Log In</button>
+                <button type="button" id="signup-button">Sign Up</button> </form>
+            <p id="auth-error" style="color: red;"></p>
+        </div>
+
+        <div id="add-book-section" class="hidden">
+            <h2>Add a New Book</h2>
+            <form id="addBookForm">
+                <div class="form-group">
+                    <label for="bookName">Book Name:</label>
+                    <input type="text" id="bookName" placeholder="e.g., Dune" required>
+                </div>
+                <div class="form-group">
+                    <label for="authorName">Author:</label>
+                    <input type="text" id="authorName" placeholder="e.g., Frank Herbert" required>
+                </div>
+                <button type="submit">Add Book</button>
+            </form>
+        </div>
+
+        <div id="edit-book-section" class="hidden">
+            <h2>Edit Book</h2>
+            <form id="editBookForm">
+                <input type="hidden" id="editBookId">
+                <div class="form-group">
+                    <label for="editBookName">Book Name:</label>
+                    <input type="text" id="editBookName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAuthorName">Author:</label>
+                    <input type="text" id="editAuthorName" required>
+                </div>
+                <button type="submit" id="saveEditButton">Save Changes</button>
+                <button type="button" id="cancelEditButton" class="logout">Cancel</button>
+            </form>
+        </div>
+        
+        <hr>
+
+        <h2>My Collection</h2>
+        <input type="text" id="searchInput" placeholder="Search by name or author...">
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th data-column="title">Book Name</th>
+                    <th data-column="author">Author</th>
+                    <th id="actions-header" style="width: 120px; text-align: center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bookList">
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQ15lzsWmiPBeBJl8qH2ZeRkTGnoD5CWo",
+            authDomain: "book-library-95091.firebaseapp.com",
+            projectId: "book-library-95091",
+            storageBucket: "book-library-95091.firebasestorage.app",
+            messagingSenderId: "976306987324",
+            appId: "1:976306987324:web:b6f7e731b20eab6e45be39",
+            measurementId: "G-WL8RZXHX31"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth(); 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- STATE ---
+            let library = []; 
+            let currentSortColumn = 'title';
+            let isAscending = true;
+
+            // --- REFERENCES ---
+            const addBookForm = document.getElementById('addBookForm');
+            const bookListBody = document.getElementById('bookList');
+            const searchInput = document.getElementById('searchInput');
+            const tableHeaders = document.querySelectorAll('#bookTable th');
+
+            // Auth UI References
+            const authContainer = document.getElementById('auth-container');
+            const authStatus = document.getElementById('auth-status');
+            const addBookSection = document.getElementById('add-book-section');
+            const userEmailDisplay = document.getElementById('user-email');
+            const authError = document.getElementById('auth-error');
+            const actionsHeader = document.getElementById('actions-header');
+            
+            const loginButton = document.getElementById('login-button');
+            const signupButton = document.getElementById('signup-button'); // RESTORED
+            const logoutButton = document.getElementById('logout-button');
+
+            // Edit UI References
+            const editBookSection = document.getElementById('edit-book-section');
+            const editBookForm = document.getElementById('editBookForm');
+            const editBookIdInput = document.getElementById('editBookId');
+            const editBookNameInput = document.getElementById('editBookName');
+            const editAuthorNameInput = document.getElementById('editAuthorName');
+            const cancelEditButton = document.getElementById('cancelEditButton');
+
+            // --- FUNCTIONS (Book Library) ---
+
+            function renderTable(booksToRender) {
+                const isLoggedIn = !!auth.currentUser;
+                
+                actionsHeader.style.display = isLoggedIn ? 'table-cell' : 'none'; 
+
+                bookListBody.innerHTML = '';
+                booksToRender.forEach(book => {
+                    const row = document.createElement('tr');
+                    
+                    const actionButtonsHtml = isLoggedIn 
+                        ? `<td class="action-cell">
+                                <button onclick="openEditModal('${book.id}', '${encodeURIComponent(book.title)}', '${encodeURIComponent(book.author)}')" class="edit" style="padding: 6px 10px;">Edit</button>
+                                <button onclick="deleteBook('${book.id}')" class="logout" style="padding: 6px 10px;">Delete</button>
+                            </td>` 
+                        : '';
+
+                    row.innerHTML = `
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        ${actionButtonsHtml} 
+                    `;
+                    bookListBody.appendChild(row);
+                });
+            }
+
+            function addBook(event) {
+                event.preventDefault();
+                const title = document.getElementById('bookName').value.trim();
+                const author = document.getElementById('authorName').value.trim();
+
+                if (title && author) {
+                    db.collection("books").add({
+                        title: title,
+                        author: author
+                    })
+                    .then(() => {
+                        addBookForm.reset();
+                        document.getElementById('bookName').focus();
+                    })
+                    .catch((error) => {
+                        console.error("Error adding book: ", error);
+                        if (error.code === "permission-denied") {
+                            alert("Error: Permission denied. Are you logged in?");
+                        } else {
+                            alert("Error adding book. Check console.");
+                        }
+                    });
+                }
+            }
+            
+            // DELETE BOOK FUNCTION 
+            window.deleteBook = function(docId) { 
+                if (!auth.currentUser) {
+                    alert("You must be logged in to delete books.");
+                    return;
+                }
+
+                if (confirm("Are you sure you want to delete this book?")) {
+                    db.collection("books").doc(docId).delete()
+                        .then(() => {
+                            console.log("Book successfully deleted!");
+                        })
+                        .catch((error) => {
+                            console.error("Error removing book: ", error);
+                            alert("Error deleting book: Permission denied or other issue.");
+                        });
+                }
+            }
+
+            // EDIT BOOK FUNCTIONS 
+            
+            // Function to populate and show the edit form
+            window.openEditModal = function(id, title, author) {
+                editBookIdInput.value = id;
+                // Use decodeURIComponent to handle titles/authors with special characters
+                editBookNameInput.value = decodeURIComponent(title);
+                editAuthorNameInput.value = decodeURIComponent(author);
+
+                editBookSection.classList.remove('hidden');
+                addBookSection.classList.add('hidden');
+                editBookNameInput.focus();
+            }
+
+            // Function to handle the update
+            function updateBook(event) {
+                event.preventDefault();
+
+                if (!auth.currentUser) {
+                    alert("You must be logged in to edit books.");
+                    return;
+                }
+
+                const docId = editBookIdInput.value;
+                const newTitle = editBookNameInput.value.trim();
+                const newAuthor = editAuthorNameInput.value.trim();
+
+                if (newTitle && newAuthor) {
+                    db.collection("books").doc(docId).update({
+                        title: newTitle,
+                        author: newAuthor
+                    })
+                    .then(() => {
+                        console.log("Book successfully updated!");
+                        // Hide the edit form and show Add form again
+                        cancelEdit();
+                    })
+                    .catch((error) => {
+                        console.error("Error updating book: ", error);
+                        alert("Error updating book: Permission denied or other issue.");
+                    });
+                }
+            }
+
+            // Function to cancel editing
+            function cancelEdit() {
+                editBookForm.reset();
+                editBookSection.classList.add('hidden');
+                addBookSection.classList.remove('hidden');
+            }
+
+
+            // --- Other Library Functions ---
+            function sortLibrary(column) {
+                if (!column) return;
+                if (currentSortColumn === column) {
+                    isAscending = !isAscending;
+                } else {
+                    currentSortColumn = column;
+                    isAscending = true;
+                }
+                library.sort((a, b) => {
+                    const valA = a[currentSortColumn].toLowerCase();
+                    const valB = b[currentSortColumn].toLowerCase();
+                    if (valA < valB) return isAscending ? -1 : 1;
+                    if (valA > valB) return isAscending ? 1 : -1;
+                    return 0;
+                });
+                updateHeaderSortClasses();
+                updateView();
+            }
+
+            function updateView() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredBooks = library.filter(book => {
+                    return book.title.toLowerCase().includes(searchTerm) ||
+                           book.author.toLowerCase().includes(searchTerm);
+                });
+                renderTable(filteredBooks);
+            }
+
+            function updateHeaderSortClasses() {
+                tableHeaders.forEach(th => {
+                    if (th.dataset.column === currentSortColumn) {
+                        th.classList.add(isAscending ? 'sorted-asc' : 'sorted-desc');
+                        th.classList.remove(isAscending ? 'sorted-desc' : 'sorted-asc');
+                    } else {
+                        th.classList.remove('sorted-asc', 'sorted-desc');
+                    }
+                });
+            }
+
+            // --- AUTHENTICATION FUNCTIONS ---
+            
+            /**
+             * Handles Sign Up. This will now deliberately cause an error 
+             * since user creation is disabled in Firebase console.
+             */
+            function handleSignUp() { // RESTORED
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                authError.textContent = ''; // Clear old errors
+                
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        console.log("User signed up:", userCredential.user.email);
+                    })
+                    .catch((error) => {
+                        console.error("Sign up error:", error);
+                        authError.textContent = "Sign up failed: " + error.message; 
+                    });
+            }
+
+            function handleLogin() {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                authError.textContent = ''; 
+                
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        console.log("User logged in:", userCredential.user.email);
+                    })
+                    .catch((error) => {
+                        console.error("Login error:", error);
+                        authError.textContent = error.message;
+                    });
+            }
+
+            function handleLogout() {
+                auth.signOut().then(() => {
+                    console.log("User logged out.");
+                });
+            }
+
+
+            // --- EVENT LISTENERS ---
+            addBookForm.addEventListener('submit', addBook);
+            searchInput.addEventListener('input', updateView);
+            tableHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    sortLibrary(header.dataset.column);
+                });
+            });
+
+            // Auth Event Listeners
+            signupButton.addEventListener('click', handleSignUp); // RESTORED
+            loginButton.addEventListener('click', handleLogin);
+            logoutButton.addEventListener('click', handleLogout);
+
+            // Edit Event Listeners
+            editBookForm.addEventListener('submit', updateBook);
+            cancelEditButton.addEventListener('click', cancelEdit);
+
+
+            // --- AUTH STATE LISTENER ---
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // --- User is LOGGED IN ---
+                    console.log("Auth state: LOGGED IN", user.email);
+                    
+                    authStatus.classList.remove('hidden');
+                    userEmailDisplay.textContent = `Logged in as: ${user.email}`;
+                    authContainer.classList.add('hidden');
+                    authError.textContent = ''; 
+                    addBookSection.classList.remove('hidden');
+
+                } else {
+                    // --- User is LOGGED OUT ---
+                    console.log("Auth state: LOGGED OUT");
+                    
+                    authStatus.classList.add('hidden');
+                    userEmailDisplay.textContent = '';
+                    authContainer.classList.remove('hidden');
+                    addBookSection.classList.add('hidden');
+                    editBookSection.classList.add('hidden');
+                }
+                
+                updateView(); 
+            });
+
+
+            // --- Load Initial Data (from Firebase) ---
+            db.collection("books").onSnapshot((snapshot) => {
+                library = [];
+                snapshot.forEach((doc) => {
+                    library.push({ ...doc.data(), id: doc.id });
+                });
+                
+                sortLibrary(currentSortColumn);
+                updateHeaderSortClasses();
+            }, (error) => {
+                console.error("Error fetching books: ", error);
+            });
+        });
+    </script>
+
+</body>
+</html>
