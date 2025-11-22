@@ -64,7 +64,6 @@ function closeISBNScanner() {
     DOM.isbnScannerModal.classList.add('hidden');
     stopISBNScan();
     stopPhotoCapture();
-    clearAllFlows();
 }
 
 async function startISBNScan() {
@@ -183,7 +182,9 @@ function stopISBNScan() {
     AppState.isbnScanStream = null;
 
     try {
-        window.Quagga.stop();
+        if (window.Quagga && typeof window.Quagga.stop === 'function') {
+            window.Quagga.stop();
+        }
     } catch (error) {
         console.log('Quagga stop error (expected):', error);
     }
