@@ -32,7 +32,24 @@ body {
 h1 {
     font-size: 24px;
     margin: 10px 0;
-    padding-right: 200px;
+    text-align: center;
+}
+
+.about-link {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.about-link:hover {
+    background-color: #3498db;
+    color: white;
 }
 
 h1,
@@ -382,8 +399,12 @@ tr.newly-added {
     h1 {
         font-size: 18px;
         margin-top: 45px;
-        padding-right: 0;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
+    }
+
+    .about-link {
+        font-size: 13px;
+        padding: 8px 16px;
     }
 
     h2 {
@@ -504,6 +525,16 @@ tr.newly-added {
         font-size: 20px;
         margin-top: 50px;
         margin-bottom: 15px;
+    }
+
+    .about-link-wrapper {
+        margin-top: 50px;
+        margin-bottom: 15px;
+    }
+
+    .about-link {
+        font-size: 11px;
+        padding: 5px 8px;
     }
 
     h2 {

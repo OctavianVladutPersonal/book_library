@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - My Book Library</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .about-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .about-header h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-right: 0;
+        }
+
+        .about-header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .feature-section {
+            background-color: #ffffff;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-section h2 {
+            color: #3498db;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-section h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            padding-left: 15px;
+            border-left: 3px solid #3498db;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .feature-description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .tech-item strong {
+            display: block;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .icon {
+            font-size: 28px;
+        }
+
+        @media (max-width: 768px) {
+            .about-container {
+                padding: 15px;
+            }
+
+            .about-header h1 {
+                font-size: 24px;
+            }
+
+            .about-header p {
+                font-size: 16px;
+            }
+
+            .feature-section {
+                padding: 20px;
+            }
+
+            .feature-section h2 {
+                font-size: 20px;
+            }
+
+            .feature-section h3 {
+                font-size: 16px;
+            }
+
+            .tech-stack {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body style="background-color: #f4f7f6;">
+    <div class="about-container">
+        <div class="about-header">
+            <h1>📚 About My Book Library</h1>
+            <p>Your personal digital book collection manager</p>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">🔐</span> Authentication & Security</h2>
+            <p class="feature-description">
+                Secure your book collection with Firebase Authentication. Only authenticated users can add, edit, or delete books from the library.
+            </p>
+            <ul class="feature-list">
+                <li><strong>Email & Password Authentication:</strong> Create an account or log in to manage your collection</li>
+                <li><strong>Secure Data Storage:</strong> Your books are stored securely in Firebase Firestore</li>
+                <li><strong>User Sessions:</strong> Stay logged in across sessions for convenience</li>
+                <li><strong>Admin Controls:</strong> Full CRUD operations for authenticated users</li>
+            </ul>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">➕</span> Adding Books to Your Library</h2>
+            <p class="feature-description">
+                Multiple convenient ways to add books to your collection, from manual entry to advanced scanning technologies.
+            </p>
+
+            <h3>📝 Manual Entry</h3>
+            <ul class="feature-list">
+                <li>Enter book title and author name directly</li>
+                <li>Smart autocomplete suggestions based on existing books</li>
+                <li>Duplicate detection prevents adding the same book twice</li>
+                <li>Visual highlighting of newly added books</li>
+            </ul>
+
+            <h3>📱 ISBN Scanning - Three Methods</h3>
+            
+            <h3 style="padding-left: 30px; font-size: 16px; border-left: 2px solid #9b59b6;">📷 Photo Capture</h3>
+            <ul class="feature-list">
+                <li>Use your device camera to take a photo of the ISBN barcode</li>
+                <li>Advanced image cropping tool to focus on the barcode area</li>
+                <li>OCR (Optical Character Recognition) powered by Tesseract.js</li>
+                <li>Automatically extracts ISBN from the photo</li>
+                <li>Edit detected ISBN if recognition needs correction</li>
+            </ul>
+
+            <h3 style="padding-left: 30px; font-size: 16px; border-left: 2px solid #9b59b6;">📊 Real-time Barcode Scanning</h3>
+            <ul class="feature-list">
+                <li>Live barcode scanning using device camera</li>
+                <li>Instant ISBN detection with visual feedback</li>
+                <li>Supports multiple barcode formats (EAN-13, UPC, Code-128)</li>
+                <li>Fast and accurate scanning technology</li>
+            </ul>
+
+            <h3 style="padding-left: 30px; font-size: 16px; border-left: 2px solid #9b59b6;">✏️ Manual ISBN Input</h3>
+            <ul class="feature-list">
+                <li>Type or paste ISBN directly</li>
+                <li>Accepts ISBN with or without hyphens</li>
+                <li>Perfect for when scanning isn't available</li>
+            </ul>
+
+            <h3>📚 Automatic Book Information Retrieval</h3>
+            <ul class="feature-list">
+                <li>Fetches book details from Google Books API using ISBN</li>
+                <li>Automatically populates title and author information</li>
+                <li>Fallback to Open Library API if needed</li>
+                <li>Validates ISBN format (10 or 13 digits)</li>
+            </ul>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">🔍</span> Browsing & Searching</h2>
+            <p class="feature-description">
+                Powerful tools to organize and find books in your collection, whether you have 10 books or 10,000.
+            </p>
+            <ul class="feature-list">
+                <li><strong>Real-time Search:</strong> Instantly filter books by title or author as you type</li>
+                <li><strong>Smart Pagination:</strong> Navigate through large collections with ease (25 books per page)</li>
+                <li><strong>Sortable Columns:</strong> Click on column headers to sort by title or author (ascending/descending)</li>
+                <li><strong>Visual Indicators:</strong> Arrow indicators show current sort direction</li>
+                <li><strong>Page Navigation:</strong> Jump to first, last, previous, or next page with dedicated buttons</li>
+                <li><strong>Results Counter:</strong> See exactly how many books match your search</li>
+                <li><strong>Public Access:</strong> Browse and search the library even without logging in</li>
+            </ul>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">✏️</span> Managing Your Collection</h2>
+            <p class="feature-description">
+                Full control over your book library with easy-to-use editing and management tools.
+            </p>
+            <ul class="feature-list">
+                <li><strong>Edit Books:</strong> Update title or author information with inline editing</li>
+                <li><strong>Delete Books:</strong> Remove books from your collection with confirmation prompts</li>
+                <li><strong>Action Buttons:</strong> Quick access to edit and delete functions next to each book</li>
+                <li><strong>Cancel Edits:</strong> Easily revert changes before saving</li>
+                <li><strong>Real-time Updates:</strong> See changes instantly across all views</li>
+            </ul>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">📱</span> User Experience Features</h2>
+            <ul class="feature-list">
+                <li><strong>Responsive Design:</strong> Works perfectly on desktop, tablet, and mobile devices</li>
+                <li><strong>Mobile-Optimized:</strong> Touch-friendly interface with proper sizing for mobile screens</li>
+                <li><strong>Camera Integration:</strong> Native camera access on mobile devices</li>
+                <li><strong>Modal Windows:</strong> Clean, distraction-free interfaces for scanning and editing</li>
+                <li><strong>Visual Feedback:</strong> Status messages, loading indicators, and success notifications</li>
+                <li><strong>Error Handling:</strong> Helpful error messages guide you when something goes wrong</li>
+                <li><strong>Smooth Animations:</strong> Polished transitions and highlighting effects</li>
+                <li><strong>Intuitive Navigation:</strong> Tab-based interface for different input methods</li>
+            </ul>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">🛠️</span> Technology Stack</h2>
+            <p class="feature-description">
+                Built with modern web technologies for reliability, performance, and security.
+            </p>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Firebase Authentication</strong>
+                    <span>Secure user management</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Firebase Firestore</strong>
+                    <span>Real-time database</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Tesseract.js</strong>
+                    <span>OCR for photo ISBN detection</span>
+                </div>
+                <div class="tech-item">
+                    <strong>JsBarcode</strong>
+                    <span>Barcode scanning library</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Google Books API</strong>
+                    <span>Book information retrieval</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Open Library API</strong>
+                    <span>Fallback book data source</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Vanilla JavaScript</strong>
+                    <span>No framework dependencies</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Responsive CSS</strong>
+                    <span>Mobile-first design</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-section">
+            <h2><span class="icon">💡</span> How It Works</h2>
+            <p class="feature-description">
+                <strong>For Visitors:</strong> Browse and search the book collection freely. Use the search bar to find specific titles or authors, and click column headers to sort the library.
+            </p>
+            <p class="feature-description">
+                <strong>For Admins:</strong> Log in to unlock the full power of the application. Add books manually or scan ISBNs using your camera. Edit or remove books as your collection grows. All changes sync in real-time to the cloud.
+            </p>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-button">← Back to Library</a>
+        </div>
+    </div>
+</body>
+</html>
