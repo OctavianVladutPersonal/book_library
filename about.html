@@ -184,28 +184,36 @@
             <h3>📝 Manual Entry</h3>
             <ul class="feature-list">
                 <li>Enter book title and author name directly</li>
-                <li>Smart autocomplete suggestions based on existing books</li>
+                <li>Smart autocomplete suggestions powered by Google Books and Open Library APIs</li>
+                <li>Real-time search as you type with 300ms debouncing</li>
+                <li>Title field shows books by selected author when focused</li>
+                <li>Auto-fills author name when selecting a book from suggestions</li>
+                <li>Keyboard navigation support (arrow keys, Enter, Escape)</li>
                 <li>Duplicate detection prevents adding the same book twice</li>
-                <li>Visual highlighting of newly added books</li>
+                <li>Visual highlighting with animation for newly added books (3-second duration)</li>
+                <li>Auto-scroll to newly added books in the table</li>
             </ul>
 
             <h3>📱 ISBN Scanning - Three Methods</h3>
             
-            <h3 style="padding-left: 30px; font-size: 16px; border-left: 2px solid #9b59b6;">📷 Photo Capture</h3>
+            <h3>📷 Photo Capture</h3>
             <ul class="feature-list">
                 <li>Use your device camera to take a photo of the ISBN barcode</li>
-                <li>Advanced image cropping tool to focus on the barcode area</li>
+                <li>Advanced interactive image cropping tool to focus on the barcode area</li>
+                <li>Drag-and-drop crop handles with edge and corner resizing</li>
                 <li>OCR (Optical Character Recognition) powered by Tesseract.js</li>
-                <li>Automatically extracts ISBN from the photo</li>
+                <li>Automatically extracts ISBN from the photo using text recognition</li>
                 <li>Edit detected ISBN if recognition needs correction</li>
+                <li>Supports both ISBN-10 and ISBN-13 format detection</li>
             </ul>
 
             <h3 style="padding-left: 30px; font-size: 16px; border-left: 2px solid #9b59b6;">📊 Real-time Barcode Scanning</h3>
             <ul class="feature-list">
-                <li>Live barcode scanning using device camera</li>
+                <li>Live barcode scanning using device camera with Quagga2 library</li>
                 <li>Instant ISBN detection with visual feedback</li>
-                <li>Supports multiple barcode formats (EAN-13, UPC, Code-128)</li>
-                <li>Fast and accurate scanning technology</li>
+                <li>Supports multiple barcode formats: EAN-13, EAN-8, UPC-A, UPC-E, and Codabar</li>
+                <li>Fast and accurate scanning technology with real-time processing</li>
+                <li>Automatic camera stream management</li>
             </ul>
 
             <h3 style="padding-left: 30px; font-size: 16px; border-left: 2px solid #9b59b6;">✏️ Manual ISBN Input</h3>
@@ -219,8 +227,10 @@
             <ul class="feature-list">
                 <li>Fetches book details from Google Books API using ISBN</li>
                 <li>Automatically populates title and author information</li>
-                <li>Fallback to Open Library API if needed</li>
-                <li>Validates ISBN format (10 or 13 digits)</li>
+                <li>Fallback to Open Library API if Google Books doesn't have results</li>
+                <li>Automatic ISBN-13 to ISBN-10 conversion for additional lookup attempts</li>
+                <li>Validates ISBN format (10 or 13 digits without hyphens)</li>
+                <li>8-second timeout per API request to prevent hanging</li>
             </ul>
         </div>
 
@@ -231,11 +241,13 @@
             </p>
             <ul class="feature-list">
                 <li><strong>Real-time Search:</strong> Instantly filter books by title or author as you type</li>
-                <li><strong>Smart Pagination:</strong> Navigate through large collections with ease (25 books per page)</li>
+                <li><strong>Smart Pagination:</strong> Navigate through large collections with ease (10 books per page)</li>
+                <li><strong>Dynamic Page Numbers:</strong> Shows up to 5 page numbers at a time with ellipsis for large collections</li>
                 <li><strong>Sortable Columns:</strong> Click on column headers to sort by title or author (ascending/descending)</li>
-                <li><strong>Visual Indicators:</strong> Arrow indicators show current sort direction</li>
+                <li><strong>Visual Indicators:</strong> Arrow indicators (▲▼) show current sort direction</li>
                 <li><strong>Page Navigation:</strong> Jump to first, last, previous, or next page with dedicated buttons</li>
-                <li><strong>Results Counter:</strong> See exactly how many books match your search</li>
+                <li><strong>Results Counter:</strong> See exactly how many books match your search and current page range</li>
+                <li><strong>Automatic Page Reset:</strong> Returns to page 1 when sorting or starting a new search</li>
                 <li><strong>Public Access:</strong> Browse and search the library even without logging in</li>
             </ul>
         </div>
@@ -246,11 +258,12 @@
                 Full control over your book library with easy-to-use editing and management tools.
             </p>
             <ul class="feature-list">
-                <li><strong>Edit Books:</strong> Update title or author information with inline editing</li>
+                <li><strong>Edit Books:</strong> Update title or author information with dedicated edit form</li>
                 <li><strong>Delete Books:</strong> Remove books from your collection with confirmation prompts</li>
-                <li><strong>Action Buttons:</strong> Quick access to edit and delete functions next to each book</li>
-                <li><strong>Cancel Edits:</strong> Easily revert changes before saving</li>
-                <li><strong>Real-time Updates:</strong> See changes instantly across all views</li>
+                <li><strong>Action Buttons:</strong> Quick access to edit (✏️) and delete (🗑️) icons next to each book</li>
+                <li><strong>Cancel Edits:</strong> Easily revert changes before saving without losing data</li>
+                <li><strong>Real-time Updates:</strong> Firebase Firestore provides instant synchronization across all views</li>
+                <li><strong>Permission Management:</strong> Only authenticated users can modify the collection</li>
             </ul>
         </div>
 
@@ -258,13 +271,16 @@
             <h2><span class="icon">📱</span> User Experience Features</h2>
             <ul class="feature-list">
                 <li><strong>Responsive Design:</strong> Works perfectly on desktop, tablet, and mobile devices</li>
-                <li><strong>Mobile-Optimized:</strong> Touch-friendly interface with proper sizing for mobile screens</li>
-                <li><strong>Camera Integration:</strong> Native camera access on mobile devices</li>
-                <li><strong>Modal Windows:</strong> Clean, distraction-free interfaces for scanning and editing</li>
-                <li><strong>Visual Feedback:</strong> Status messages, loading indicators, and success notifications</li>
-                <li><strong>Error Handling:</strong> Helpful error messages guide you when something goes wrong</li>
-                <li><strong>Smooth Animations:</strong> Polished transitions and highlighting effects</li>
-                <li><strong>Intuitive Navigation:</strong> Tab-based interface for different input methods</li>
+                <li><strong>Mobile-Optimized:</strong> Touch-friendly interface with proper button sizing (44px minimum)</li>
+                <li><strong>Fixed Mobile Headers:</strong> Authentication status stays visible while scrolling on mobile</li>
+                <li><strong>Camera Integration:</strong> Native camera access with automatic facingMode: 'environment' for rear cameras</li>
+                <li><strong>Modal Windows:</strong> Bottom-sheet style modals on mobile for better ergonomics</li>
+                <li><strong>Visual Feedback:</strong> Status messages, loading indicators, and real-time progress updates</li>
+                <li><strong>Error Handling:</strong> Comprehensive error messages for camera permission, network issues, and API failures</li>
+                <li><strong>Smooth Animations:</strong> 3-second highlight pulse animation for newly added books</li>
+                <li><strong>Intuitive Navigation:</strong> Tab-based interface for switching between Photo, Barcode, and Manual input</li>
+                <li><strong>Performance:</strong> Debounced search and autocomplete to reduce API calls</li>
+                <li><strong>Security Checks:</strong> HTTPS requirement validation for camera access</li>
             </ul>
         </div>
 
@@ -280,30 +296,30 @@
                 </div>
                 <div class="tech-item">
                     <strong>Firebase Firestore</strong>
-                    <span>Real-time database</span>
+                    <span>Real-time NoSQL database</span>
                 </div>
                 <div class="tech-item">
-                    <strong>Tesseract.js</strong>
+                    <strong>Tesseract.js v4</strong>
                     <span>OCR for photo ISBN detection</span>
                 </div>
                 <div class="tech-item">
-                    <strong>JsBarcode</strong>
-                    <span>Barcode scanning library</span>
+                    <strong>Quagga2 v1.10.2</strong>
+                    <span>Real-time barcode scanning</span>
                 </div>
                 <div class="tech-item">
                     <strong>Google Books API</strong>
-                    <span>Book information retrieval</span>
+                    <span>Primary book data source</span>
                 </div>
                 <div class="tech-item">
                     <strong>Open Library API</strong>
-                    <span>Fallback book data source</span>
+                    <span>Fallback & autocomplete data</span>
                 </div>
                 <div class="tech-item">
-                    <strong>Vanilla JavaScript</strong>
-                    <span>No framework dependencies</span>
+                    <strong>Vanilla JavaScript (ES6+)</strong>
+                    <span>Modular, no frameworks</span>
                 </div>
                 <div class="tech-item">
-                    <strong>Responsive CSS</strong>
+                    <strong>Responsive CSS3</strong>
                     <span>Mobile-first design</span>
                 </div>
             </div>

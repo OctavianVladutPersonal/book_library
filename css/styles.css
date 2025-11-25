@@ -524,17 +524,12 @@ tr.newly-added {
     h1 {
         font-size: 20px;
         margin-top: 50px;
-        margin-bottom: 15px;
-    }
-
-    .about-link-wrapper {
-        margin-top: 50px;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .about-link {
-        font-size: 11px;
-        padding: 5px 8px;
+        font-size: 12px;
+        padding: 7px 14px;
     }
 
     h2 {
