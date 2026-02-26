@@ -1,6 +1,5 @@
 # Environment files with sensitive data
 .env.local
-js/firebase-config.js
 
 # Node modules (if you add build tools later)
 node_modules/
