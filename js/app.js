@@ -7,11 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup event listeners
     setupEventListeners();
 
-    // Setup authentication
-    setupAuthStateListener(updateView);
-
-    // Load initial books
-    loadBooks();
+    // Setup authentication - loads books when user logs in
+    setupAuthStateListener((user) => {
+        if (user) {
+            loadBooks();
+        }
+        updateView();
+    });
 
     // Initialize autocomplete for book name and author fields
     Autocomplete.init(DOM.bookNameInput, DOM.bookNameAutocomplete, 'title');
