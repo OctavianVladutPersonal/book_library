@@ -19,26 +19,27 @@
 
         .about-header h1 {
             font-size: 32px;
-            color: #2c3e50;
+            color: var(--text-heading);
             margin-bottom: 10px;
             padding-right: 0;
         }
 
         .about-header p {
             font-size: 18px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .feature-section {
-            background-color: #ffffff;
+            background-color: var(--bg-secondary);
             padding: 25px;
             margin-bottom: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-light);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .feature-section h2 {
-            color: #3498db;
+            color: var(--color-blue);
             font-size: 24px;
             margin-top: 0;
             margin-bottom: 15px;
@@ -48,12 +49,12 @@
         }
 
         .feature-section h3 {
-            color: #2c3e50;
+            color: var(--text-heading);
             font-size: 18px;
             margin-top: 20px;
             margin-bottom: 10px;
             padding-left: 15px;
-            border-left: 3px solid #3498db;
+            border-left: 3px solid var(--color-blue);
         }
 
         .feature-list {
@@ -79,7 +80,7 @@
         }
 
         .feature-description {
-            color: #555;
+            color: var(--text-secondary);
             line-height: 1.8;
             margin-bottom: 15px;
         }
@@ -92,23 +93,24 @@
         }
 
         .tech-item {
-            background-color: #f8f9fa;
+            background-color: var(--bg-form);
             padding: 15px;
             border-radius: 5px;
             text-align: center;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-light);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .tech-item strong {
             display: block;
-            color: #3498db;
+            color: var(--color-blue);
             margin-bottom: 5px;
         }
 
         .back-button {
             display: inline-block;
-            background-color: #3498db;
-            color: white;
+            background-color: var(--color-blue);
+            color: var(--bg-secondary);
             padding: 12px 24px;
             text-decoration: none;
             border-radius: 5px;
@@ -117,7 +119,7 @@
         }
 
         .back-button:hover {
-            background-color: #2980b9;
+            background-color: var(--color-blue-hover);
         }
 
         .icon {
@@ -155,11 +157,12 @@
         }
     </style>
 </head>
-<body style="background-color: #f4f7f6;">
+<body>
     <div class="about-container">
         <div class="about-header">
             <h1>📚 About Tavi's Book Library</h1>
             <p>Your personal digital book collection manager</p>
+            <button id="dark-mode-toggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
         </div>
 
         <div class="feature-section">
@@ -339,5 +342,6 @@
             <a href="index.html" class="back-button">← Back to Library</a>
         </div>
     </div>
+    <script src="js/dark-mode.js"></script>
 </body>
 </html>
