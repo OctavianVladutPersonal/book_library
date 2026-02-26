@@ -16,39 +16,42 @@ class DarkModeManager {
         const isDarkMode = savedMode !== null ? savedMode : this.preferSystemDarkMode;
         
         if (isDarkMode) {
-            this.enableDarkMode();
-        } else {
-            this.updateToggleButton();
+            this.enableDarkMode(false); // false = don't save to localStorage yet
         }
+
+        this.setupToggleButton();
 
         // Listen for system theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (this.getSavedMode() === null) {
                 if (e.matches) {
-                    this.enableDarkMode();
+                    this.enableDarkMode(false);
                 } else {
-                    this.disableDarkMode();
+                    this.disableDarkMode(false);
                 }
             }
         });
-
-        // Add click event listener to toggle button
-        this.setupToggleButton();
     }
 
     setupToggleButton() {
         const button = document.getElementById('dark-mode-toggle');
         if (button) {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
                 this.toggle();
             });
-            this.updateToggleButton();
         }
+        this.updateToggleButton();
     }
 
     getSavedMode() {
-        const saved = localStorage.getItem(this.storageKey);
-        return saved ? JSON.parse(saved) : null;
+        try {
+            const saved = localStorage.getItem(this.storageKey);
+            return saved ? JSON.parse(saved) : null;
+        } catch (e) {
+            console.warn('localStorage not available:', e);
+            return null;
+        }
     }
 
     isDarkMode() {
@@ -57,21 +60,33 @@ class DarkModeManager {
 
     toggle() {
         if (this.isDarkMode()) {
-            this.disableDarkMode();
+            this.disableDarkMode(true);
         } else {
-            this.enableDarkMode();
+            this.enableDarkMode(true);
         }
     }
 
-    enableDarkMode() {
+    enableDarkMode(save = true) {
         document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem(this.storageKey, 'true');
+        if (save) {
+            try {
+                localStorage.setItem(this.storageKey, 'true');
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
+        }
         this.updateToggleButton();
     }
 
-    disableDarkMode() {
+    disableDarkMode(save = true) {
         document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem(this.storageKey, 'false');
+        if (save) {
+            try {
+                localStorage.setItem(this.storageKey, 'false');
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
+        }
         this.updateToggleButton();
     }
 
@@ -85,10 +100,14 @@ class DarkModeManager {
 }
 
 // Initialize dark mode manager when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+function initDarkMode() {
+    if (!window.darkModeManager) {
         window.darkModeManager = new DarkModeManager();
-    });
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDarkMode);
 } else {
-    window.darkModeManager = new DarkModeManager();
+    initDarkMode();
 }
