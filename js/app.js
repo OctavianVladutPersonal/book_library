@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup event listeners
     setupEventListeners();
 
-    // Setup authentication - loads books when user logs in
+    // Load books for all users (logged in or not)
+    loadBooks();
+
+    // Setup authentication state listener to update UI
     setupAuthStateListener((user) => {
-        if (user) {
-            loadBooks();
-        }
         updateView();
     });
 

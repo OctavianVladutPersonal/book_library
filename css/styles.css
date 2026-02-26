@@ -244,19 +244,55 @@ button.add-book:hover {
 #auth-container {
     background-color: #fafafa;
     border: 1px solid #eee;
-    padding: 20px;
+    padding: 12px;
     border-radius: 8px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#auth-container h2 {
+    font-size: 18px;
+    margin: 5px 0 10px 0;
+}
+
+#signup-button {
+    display: none;
 }
 
 #auth-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+#auth-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 #auth-form button {
-    grid-column: auto;
+    grid-column: 1;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#auth-form button:hover {
+    background-color: #2980b9;
+}
+
+#login-button {
+    grid-column: 1;
 }
 
 #auth-status {
@@ -361,6 +397,16 @@ tr:nth-child(even) {
 
 .icon-button.delete-icon:hover {
     background-color: #ffe8e8;
+}
+
+/* Disabled button styles */
+.icon-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.icon-button:disabled:hover {
+    background-color: transparent;
 }
 
 /* Highlight for newly added books */

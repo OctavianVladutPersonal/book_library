@@ -8,7 +8,7 @@ let newlyAddedBookId = null;
 
 function renderTable(booksToRender) {
     const isLoggedIn = !!auth.currentUser;
-    DOM.actionsHeader.style.display = isLoggedIn ? 'table-cell' : 'none';
+    DOM.actionsHeader.style.display = 'table-cell';
 
     DOM.bookListBody.innerHTML = '';
     booksToRender.forEach(book => {
@@ -24,7 +24,10 @@ function renderTable(booksToRender) {
                 <button onclick="openEditModal('${book.id}', '${Utils.encodeForAttribute(book.title)}', '${Utils.encodeForAttribute(book.author)}')" class="icon-button edit-icon" title="Edit">✏️</button>
                 <button onclick="deleteBook('${book.id}')" class="icon-button delete-icon" title="Delete">🗑️</button>
             </td>`
-            : '';
+            : `<td class="action-cell">
+                <button class="icon-button edit-icon" disabled title="Log in to edit">✏️</button>
+                <button class="icon-button delete-icon" disabled title="Log in to delete">🗑️</button>
+            </td>`;
 
         row.innerHTML = `
             <td>${book.title}</td>
